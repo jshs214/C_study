@@ -1,76 +1,57 @@
-#include<stdio.h>
+#include<bits/stdc++.h>
+using namespace std;
 
-int map[101][101];
-int checkmap[101][101];
+int dy[4] = { -1, 0, 1, 0 };
+int dx[4] = { 0, 1, 0, -1 };
+int m, n, k, y, x, ret, ny, nx, t;
+int rx1, ry1, rx2, ry2, rcnt, cnt;
+int area[100];
+int a[104][104] = { 0 };
+bool visited[104][104];
 
-int dx[4] = {-1, 0, 1, 0};
-int dy[4] = {0, -1, 0, 1};
-
-int nx, ny;
-int x1, x2, y1, y2;
-int M, N, K;
-int rcnt, cnt=0;
-
-void setmap(int M, int N) {
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < N; j++) {
-			map[i][j] = 0;
-		}
-	}
-}
-void make(int x1, int y1, int x2, int y2) {
-	for (int i = y1; i < y2; i++) {
-		for (int j = x1; j < x2; j++) {
-			map[i][j] = 1;
-		}
-	}
+void dfs(int y, int x) {
+    visited[y][x] = 1;
+    rcnt++;
+    for (int i = 0; i < 4; i++) {
+        ny = y + dy[i];
+        nx = x + dx[i];
+        if (ny < 0 || nx < 0 || ny >= n || nx >= m) continue;
+        if (a[ny][nx] == 0 && !visited[ny][nx]) {
+            dfs(ny, nx);
+        }
+    }
+    return;
 }
 
+int main() {
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> n >> m >> k;
 
-void check(int M, int N) {	//y, x
-	checkmap[M][N] = 1;
-	rcnt++;
-	for (int k = 0; k < 4; k++) {
-		ny = M + dy[k];
-		nx = N + dx[k];
-		if (ny <0 || nx <0 || ny>=M || nx >=N) continue;
-		if (map[ny][nx] == 0 && checkmap[ny][nx] != 1) {
-			check(ny, nx);
-		}
-	}
-	return;
-
-}
-
-int main()
-{
-	int count=0;
-	int result[100];
-	scanf("%d %d %d", &M, &N, &K);
-	
-	setmap(M, N);
-
-	for (int i = 0; i < K; i++) {
-		scanf("%d %d %d %d", &x1, &y1, &x2, &y2);
-		make(x1, y1, x2, y2);
-	}
+    for (int i = i; i < k; i++) {
+        scanf("%d %d %d %d", &rx1, &ry1, &rx2, &ry2);
+        for (int i = ry1; i < ry2; i++) {
+            for (int j = rx1; j < rx2; j++) {
+                a[i][j] = 1;
+            }
+        }
+    }
 
 
-	for (int i = 0; i < M; i++) {
-		for (int j = 0; j < N; j++) {
-			if (map[i][j] == 0 && checkmap[i][j] != 1) {
-				count++;
-				check(i, j);
-				result[cnt++] = rcnt;
-				rcnt = 0;
-			}
-		}
-	}
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (a[i][j] == 0 && !visited[i][j]) {
+                ret++; dfs(i, j);
+                area[cnt++] = rcnt;
+                rcnt = 0;
+            }
+        }
+    }
+    cout << ret << '\n';
+    sort(area + 0, area + cnt);
+    for (int i = 0; i < cnt; i++) {
+        printf("%d ", area[i]);
+    }
 
-	printf("%d\n", count);
-
-	for (int i = 0; i < cnt; i++) {
-		printf("%d ", result[i]);
-	}
-	return 0;
+    return 0;
 }
